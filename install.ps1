@@ -147,7 +147,9 @@ if (-not (Test-Path -LiteralPath $chromeDir)) {
 
 $themeFiles = @(
     'tokyo-night-storm.css',
-    'tokyo-night-storm-content.css'
+    'tokyo-night-storm-content.css',
+    "userChrome.css",
+    "userContent.css"
 )
 
 foreach ($name in $themeFiles) {
@@ -163,24 +165,6 @@ foreach ($name in $themeFiles) {
     }
     Write-Host "  + $name"
 }
-
-$imports = @(
-    @{
-        File = Join-Path $chromeDir 'userChrome.css'
-        Line = '@import url("tokyo-night-storm.css");'
-    },
-    @{
-        File = Join-Path $chromeDir 'userContent.css'
-        Line = '@import url("tokyo-night-storm-content.css");'
-    }
-)
-
-foreach ($item in $imports) {
-    $result = Add-ThemeImport -Path $item.File -ImportLine $item.Line
-    Write-Host ("  + {0}: {1}" -f (Split-Path -Leaf $item.File), $result)
-}
-
-Write-Host ''
 
 $prefEnabled = $false
 foreach ($prefFile in @((Join-Path $ProfilePath 'prefs.js'), (Join-Path $ProfilePath 'user.js'))) {

@@ -1,0 +1,129 @@
+
+/* Tokyo Night Storm — Sidebery */
+:root,
+body,
+#root {
+  color-scheme: dark;
+  background: #1f2335 !important;
+  color: #c0caf5 !important;
+  scrollbar-color: #3b4261 #1f2335;
+}
+
+#root {
+  --tn-bg: #24283b;
+  --tn-panel: #1f2335;
+  --tn-input: #1b1e2d;
+  --tn-hover: #292e42;
+  --tn-border: #3b4261;
+  --tn-text: #c0caf5;
+  --tn-muted: #a9b1d6;
+  --tn-accent: #7aa2f7;
+  --tn-accent-strong: #3d59a1;
+}
+
+.Tab {
+  color: var(--tn-text) !important;
+  background-color: transparent !important;
+  border-radius: 6px;
+  margin: 2px 4px;
+}
+
+.Tab:hover {
+  background-color: var(--tn-hover) !important;
+}
+
+.Tab[data-active="true"],
+.Tab.active {
+  color: var(--tn-text) !important;
+  background-color: var(--tn-hover) !important;
+  box-shadow: inset 3px 0 var(--tn-accent);
+}
+
+.Tab .title {
+  color: inherit !important;
+}
+
+.NavigationBar {
+  background-color: var(--tn-panel) !important;
+  border-color: var(--tn-border) !important;
+}
+
+.NavigationBar .nav-item:hover {
+  background-color: var(--tn-hover) !important;
+}
+
+input,
+textarea,
+select {
+  color: var(--tn-text) !important;
+  background-color: var(--tn-input) !important;
+  border-color: var(--tn-border) !important;
+}
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--tn-accent) !important;
+  outline-offset: 1px;
+}
+
+::selection {
+  color: var(--tn-text);
+  background-color: var(--tn-accent-strong);
+}
+
+.NewTab,
+.NewTabButton,
+.new-tab-button,
+#new-tab-button {
+  background-color: transparent !important;
+  color: var(--tn-text) !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.NewTab:hover,
+.NewTabButton:hover,
+.new-tab-button:hover,
+#new-tab-button:hover {
+  background-color: var(--tn-hover) !important;
+  color: var(--tn-accent) !important;
+}
+
+/* Tokyo Night Storm — New Tab button fix */
+
+#root button,
+#root [role="button"],
+#root .new-tab,
+#root .new-tab-button,
+#root .NewTab,
+#root .NewTabButton {
+  background: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+/* New Tab button hover */
+#root button:hover,
+#root [role="button"]:hover {
+  background: var(--tn-hover) !important;
+}
+
+/* Remove dark backgrounds from button internals */
+#root button *,
+#root [role="button"] * {
+  background-color: transparent !important;
+}
+
+/* Preserve icon color */
+#root button svg,
+#root [role="button"] svg {
+  color: var(--tn-text) !important;
+  fill: var(--tn-text) !important;
+}
+
+#root[data-frame-color-scheme] {
+  --frame-bg: #1f2335 !important;
+  --s-frame-bg: #1f2335 !important;
+}

@@ -13,3 +13,26 @@
    ============================================================================ */
 
 @import url("tokyo-night-storm.css");
+
+/* Hide toolbar and move window controls to the right of the navigation bar (Nova UI) */
+
+#TabsToolbar-customization-target {
+  display: none !important;
+}
+
+#TabsToolbar > .titlebar-buttonbox-container,
+#toolbar-menubar > .titlebar-buttonbox-container {
+  display: none !important;
+}
+
+#nav-bar > .titlebar-buttonbox-container {
+  display: flex !important;
+  order: 1000;
+  margin-inline-start: 8px;
+  align-items: center;
+  visibility: visible !important;
+}
+
+#sidebar-panel-header {
+  display: none !important;
+}
