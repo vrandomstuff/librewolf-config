@@ -1,0 +1,712 @@
+/* ============================================================================
+   Tokyo Night Storm — browser chrome theme for Firefox / LibreWolf
+   ----------------------------------------------------------------------------
+   Palette: Tokyo Night Storm by enkia
+   Target : Firefox 157+ ("Nova" UI) and LibreWolf 157+. Includes fallbacks for
+            pre-Nova tokens, so it also behaves with Nova disabled.
+
+   Install: add this line to the TOP of your profile's
+            chrome/userChrome.css (or just copy the bundled userChrome.css):
+
+              @import url("tokyo-night-storm.css");
+
+   Tweak: edit the semantic colours in section 1, or append overrides at the
+          bottom of this file. Everything else is derived from them.
+   ============================================================================ */
+
+/* ----------------------------------------------------------------------------
+   1. Palette
+   ---------------------------------------------------------------------------- */
+:root {
+  /* Backgrounds */
+  --tn-bg:           #24283b;  /* editor / page */
+  --tn-bg-dark:      #1f2335;  /* frame, sidebar, panels */
+  --tn-bg-darker:    #1b1e2d;  /* url bar, inputs, darkest surface */
+  --tn-bg-highlight: #292e42;  /* hover / selected rows and tabs */
+  --tn-terminal-black: #414868;
+
+  /* Lines */
+  --tn-border:       #3b4261;  /* fg_gutter — the one true border colour */
+  --tn-border-soft:  #2f344d;  /* derived: quieter internal lines */
+
+  /* Foreground */
+  --tn-fg:           #c0caf5;
+  --tn-fg-dark:      #a9b1d6;
+  --tn-comment:      #565f89;
+  --tn-dark3:        #545c7e;
+  --tn-dark5:        #737aa2;
+
+  /* Accents */
+  --tn-blue:         #7aa2f7;
+  --tn-blue0:        #3d59a1;
+  --tn-blue1:        #2ac3de;
+  --tn-blue2:        #0db9d7;
+  --tn-blue5:        #89ddff;
+  --tn-blue6:        #b4f9f8;
+  --tn-blue7:        #394b70;
+  --tn-cyan:         #7dcfff;
+  --tn-magenta:      #bb9af7;
+  --tn-magenta2:     #ff007c;
+  --tn-purple:       #9d7cd8;
+  --tn-orange:       #ff9e64;
+  --tn-yellow:       #e0af68;
+  --tn-green:        #9ece6a;
+  --tn-green1:       #73daca;
+  --tn-green2:       #41a6b5;
+  --tn-teal:         #1abc9c;
+  --tn-red:          #f7768e;
+  --tn-red1:         #db4b4b;
+
+  /* Semantic aliases — change these two for a different accent */
+  --tn-accent:       var(--tn-blue);
+  --tn-accent-soft:  var(--tn-blue0);
+
+  /* Shape */
+  --tn-radius:       8px;
+  --tn-tab-radius:   6px;
+}
+
+/* ----------------------------------------------------------------------------
+   2. Firefox / Nova design tokens
+   ---------------------------------------------------------------------------- */
+:root {
+  /* ---- Nova toolbox (Firefox 157+) ------------------------------------- */
+  --toolbox-background-color:                 var(--tn-bg-dark) !important;
+  --toolbox-background-color-inactive:        var(--tn-bg-darker) !important;
+  --toolbox-background-color-gradient-leading:  var(--tn-bg-dark) !important;
+  --toolbox-background-color-gradient-trailing: var(--tn-bg-dark) !important;
+  --toolbox-background-gradient:              none !important;
+  --toolbox-background-image:                 none !important;
+  --toolbar-background-color:                 var(--tn-bg) !important;
+
+  /* ---- Window / frame (legacy + Nova) ---------------------------------- */
+  --lwt-accent-color:               var(--tn-bg-dark) !important;
+  --lwt-accent-color-inactive:      var(--tn-bg-darker) !important;
+  --lwt-text-color:                 var(--tn-fg) !important;
+  --lwt-tab-text:                   var(--tn-fg-dark) !important;
+  --lwt-selected-tab-background-color: var(--tn-bg-highlight) !important;
+  --lwt-additional-images:          none !important;
+  --lwt-header-image:               none !important;
+  --toolbar-bgcolor:                var(--tn-bg) !important;
+  --toolbar-color:                  var(--tn-fg) !important;
+  --toolbar-non-lwt-bgcolor:        var(--tn-bg) !important;
+  --toolbar-non-lwt-textcolor:      var(--tn-fg) !important;
+
+  /* ---- Tabs ------------------------------------------------------------ */
+  --tab-text-color:                 var(--tn-fg-dark) !important;
+  --tab-text-color-inactive:        var(--tn-fg-dark) !important;
+  --tab-text-color-hover:           var(--tn-fg) !important;
+  --tab-text-color-selected:        var(--tn-fg) !important;
+  --tab-background-color-hover:     var(--tn-bg) !important;
+  --tab-background-color-selected:  var(--tn-bg-highlight) !important;
+  --tab-border-color-accent:        var(--tn-accent) !important;
+  --tab-border-color-selected:      var(--tn-border) !important;
+  --tab-border-color-selected-leading:  var(--tn-border) !important;
+  --tab-border-color-selected-trailing: var(--tn-border) !important;
+  --tab-selected-bgcolor:           var(--tn-bg-highlight) !important;
+  --tab-selected-textcolor:         var(--tn-fg) !important;
+  --tab-line-color:                 var(--tn-accent) !important;
+  --tab-loading-fill:               var(--tn-accent) !important;
+
+  /* ---- Toolbar buttons ------------------------------------------------- */
+  --toolbarbutton-icon-fill:             var(--tn-fg) !important;
+  --toolbarbutton-icon-fill-attention:   var(--tn-accent) !important;
+  --toolbarbutton-hover-background:      var(--tn-bg-highlight) !important;
+  --toolbarbutton-active-background:     var(--tn-accent-soft) !important;
+  --toolbarbutton-background-color-hover:  var(--tn-bg-highlight) !important;
+  --toolbarbutton-background-color-active: var(--tn-accent-soft) !important;
+  --lwt-toolbarbutton-icon-fill:           var(--tn-fg) !important;
+  --lwt-toolbarbutton-hover-background:    var(--tn-bg-highlight) !important;
+  --lwt-toolbarbutton-active-background:   var(--tn-accent-soft) !important;
+
+  --button-background-color-hover:       var(--tn-bg-highlight) !important;
+  --button-background-color-active:      var(--tn-accent-soft) !important;
+  --button-background-color-ghost-hover: var(--tn-bg-highlight) !important;
+  --button-background-color-ghost-active: var(--tn-accent-soft) !important;
+  --button-background-color-menu-selected: var(--tn-accent-soft) !important;
+  --button-text-color:                   var(--tn-fg) !important;
+  --button-text-color-hover:             var(--tn-fg) !important;
+  --button-text-color-active:            var(--tn-fg) !important;
+  --button-text-color-ghost-hover:       var(--tn-fg) !important;
+  --button-text-color-ghost-active:      var(--tn-fg) !important;
+
+  /* ---- URL bar / search ------------------------------------------------- */
+  --toolbar-field-background-color:       var(--tn-bg-darker) !important;
+  --toolbar-field-color:                  var(--tn-fg) !important;
+  --toolbar-field-border-color:           var(--tn-border) !important;
+  --toolbar-field-focus-background-color: var(--tn-bg-darker) !important;
+  --toolbar-field-focus-border-color:     var(--tn-accent) !important;
+  --toolbar-field-focus-color:            var(--tn-fg) !important;
+  --toolbar-field-highlight:              var(--tn-accent-soft) !important;
+  --toolbar-field-highlight-text:         var(--tn-fg) !important;
+
+  --urlbar-box-bgcolor:                   var(--tn-bg) !important;
+  --urlbar-box-text-color:                var(--tn-fg-dark) !important;
+  --urlbar-box-hover-bgcolor:             var(--tn-bg-highlight) !important;
+  --urlbar-box-hover-text-color:          var(--tn-fg) !important;
+  --urlbar-box-focus-bgcolor:             var(--tn-bg-highlight) !important;
+  --urlbar-box-background-color-hover:    var(--tn-bg-highlight) !important;
+  --urlbar-box-background-color-active:   var(--tn-accent-soft) !important;
+  --urlbar-box-text-color-hover:          var(--tn-fg) !important;
+  --urlbar-box-text-color-active:         var(--tn-fg) !important;
+
+  --urlbar-icon-fill-opacity:             1 !important;
+  --urlbar-border-radius:                 var(--tn-radius) !important;
+  --urlbar-background-border-radius:      var(--tn-radius) !important;
+  --urlbar-inner-border-radius:           var(--tn-radius) !important;
+  --urlbarview-border-radius:             10px !important;
+  --urlbarView-row-border-radius:         6px !important;
+  --urlbarView-separator-color:           var(--tn-border) !important;
+  --urlbarview-separator-color:           var(--tn-border) !important;
+
+  /* ---- Panels, menus, autocomplete ------------------------------------- */
+  --arrowpanel-background:                    var(--tn-bg-dark) !important;
+  --arrowpanel-color:                         var(--tn-fg) !important;
+  --arrowpanel-border-color:                  var(--tn-border) !important;
+  --arrowpanel-dimmed:                        var(--tn-bg-highlight) !important;
+  --arrowpanel-menuitem-hover-background-color: var(--tn-bg-highlight) !important;
+  --panel-background:                         var(--tn-bg-dark) !important;
+  --panel-color:                              var(--tn-fg) !important;
+  --panel-border-color:                       var(--tn-border) !important;
+  --panel-separator-color:                    var(--tn-border) !important;
+  --panel-item-hover-bgcolor:                 var(--tn-bg-highlight) !important;
+  --panel-item-active-bgcolor:                var(--tn-accent-soft) !important;
+  --menu-background-color:                    var(--tn-bg-dark) !important;
+  --menu-color:                               var(--tn-fg) !important;
+  --menu-disabled-color:                      var(--tn-comment) !important;
+  --menuitem-hover-background-color:          var(--tn-bg-highlight) !important;
+  --menuitem-hover-color:                     var(--tn-fg) !important;
+  --menuitem-disabled-hover-background-color: transparent !important;
+  --autocomplete-popup-background:            var(--tn-bg-dark) !important;
+  --autocomplete-popup-color:                 var(--tn-fg) !important;
+  --autocomplete-popup-highlight-background:  var(--tn-accent-soft) !important;
+  --autocomplete-popup-highlight-color:       var(--tn-fg) !important;
+
+  /* ---- Sidebar ---------------------------------------------------------- */
+  --sidebar-background-color: var(--tn-bg-dark) !important;
+  --sidebar-text-color:       var(--tn-fg) !important;
+  --sidebar-border-color:     var(--tn-border) !important;
+  --sidebar-highlight-background-color: var(--tn-accent-soft) !important;
+  --sidebar-highlight-text-color:       var(--tn-fg) !important;
+
+  /* ---- New tab / content ------------------------------------------------ */
+  --newtab-background-color:            var(--tn-bg) !important;
+  --newtab-text-primary-color:          var(--tn-fg) !important;
+  --newtab-primary-action-background:   var(--tn-accent) !important;
+  --tabpanel-background-color:          var(--tn-bg) !important;
+  --chrome-content-separator-color:     var(--tn-border) !important;
+
+  /* ---- Focus / shape ---------------------------------------------------- */
+  --focus-outline-color:     var(--tn-accent) !important;
+  --tab-border-radius:       var(--tn-tab-radius) !important;
+  --toolbarbutton-border-radius: 6px !important;
+  --button-border-radius:    6px !important;
+  --input-text-border-radius: 6px !important;
+  --arrowpanel-border-radius: var(--tn-radius) !important;
+  --panel-border-radius:     var(--tn-radius) !important;
+  --panel-menuitem-border-radius: 4px !important;
+  --menuitem-border-radius:  4px !important;
+}
+
+/* ----------------------------------------------------------------------------
+   3. Window surfaces
+   ---------------------------------------------------------------------------- */
+body,
+#navigator-toolbox,
+#navigator-toolbox.fullscreen-floating-toolbox,
+#titlebar,
+#TabsToolbar,
+#toolbar-menubar,
+#PersonalToolbar,
+#notifications-toolbar {
+  background-color: var(--tn-bg-dark) !important;
+  background-image: none !important;
+  color: var(--tn-fg) !important;
+}
+
+#nav-bar {
+  background-color: var(--tn-bg) !important;
+  background-image: none !important;
+  border-top: none !important;
+  box-shadow: none !important;
+}
+
+/* One crisp line between browser chrome and the page. */
+#navigator-toolbox {
+  border-bottom: 1px solid var(--tn-border) !important;
+}
+
+#tabbrowser-tabbox,
+#tabbrowser-tabpanels {
+  background-color: var(--tn-bg) !important;
+}
+
+/* ----------------------------------------------------------------------------
+   4. Tabs
+   ---------------------------------------------------------------------------- */
+.tabbrowser-tab {
+  color: var(--tn-fg-dark) !important;
+}
+
+.tab-background {
+  background-color: transparent !important;
+  background-image: none !important;
+  border: 1px solid transparent !important;
+  outline: none !important;
+  box-shadow: none !important;
+  border-radius: var(--tn-tab-radius) !important;
+}
+
+.tabbrowser-tab:hover > .tab-stack > .tab-background:not([selected], [multiselected]) {
+  background-color: var(--tn-bg) !important;
+  border-color: var(--tn-border-soft) !important;
+}
+
+.tab-background:is([selected], [visuallyselected], [multiselected]) {
+  background-color: var(--tn-bg-highlight) !important;
+  border-color: var(--tn-border) !important;
+}
+
+.tab-background[multiselected]:not([selected], [visuallyselected]) {
+  background-color: var(--tn-accent-soft) !important;
+  border-color: var(--tn-accent-soft) !important;
+}
+
+/* Accent rail: top edge for horizontal tabs, left edge for vertical tabs. */
+#tabbrowser-tabs:not([orient="vertical"]) .tab-background:is([selected], [visuallyselected]) {
+  box-shadow: inset 0 2px 0 var(--tn-accent) !important;
+}
+
+#tabbrowser-tabs[orient="vertical"] .tab-background:is([selected], [visuallyselected]) {
+  box-shadow: inset 2px 0 0 var(--tn-accent) !important;
+}
+
+.tab-content {
+  color: var(--tn-fg-dark) !important;
+}
+
+.tab-content:is([selected], [multiselected]),
+.tabbrowser-tab:hover > .tab-stack > .tab-content {
+  color: var(--tn-fg) !important;
+}
+
+.tab-label {
+  color: inherit !important;
+}
+
+/* Close button */
+.tab-close-button {
+  border-radius: 4px !important;
+  color: var(--tn-comment) !important;
+  fill: var(--tn-comment) !important;
+}
+
+.tabbrowser-tab:is(:hover, [selected], [visuallyselected], [multiselected]) .tab-close-button {
+  color: var(--tn-fg-dark) !important;
+  fill: var(--tn-fg-dark) !important;
+}
+
+.tab-close-button:hover {
+  background-color: var(--tn-red) !important;
+  color: var(--tn-bg-darker) !important;
+  fill: var(--tn-bg-darker) !important;
+}
+
+/* New-tab buttons and tab-strip buttons */
+#tabs-newtab-button,
+#vertical-tabs-newtab-button,
+#new-tab-button,
+#alltabs-button {
+  color: var(--tn-fg-dark) !important;
+}
+
+#tabs-newtab-button:hover > .toolbarbutton-icon,
+#vertical-tabs-newtab-button:hover > .toolbarbutton-icon {
+  background-color: var(--tn-bg-highlight) !important;
+  border-radius: 6px !important;
+}
+
+/* Tab groups (Nova) */
+.tab-group-label {
+  color: var(--tn-fg-dark) !important;
+  border-color: var(--tn-border) !important;
+}
+
+/* ----------------------------------------------------------------------------
+   5. Address bar and search
+   ---------------------------------------------------------------------------- */
+.urlbar-background,
+#urlbar-background,
+#searchbar {
+  background-color: var(--tn-bg-darker) !important;
+  border: 1px solid var(--tn-border) !important;
+  border-radius: var(--tn-radius) !important;
+  box-shadow: none !important;
+}
+
+#urlbar:is([focused], [open], [popover-open], :focus-within) > .urlbar-background,
+#urlbar:is([focused], [open], [popover-open], :focus-within) > #urlbar-background,
+#searchbar:focus-within {
+  border-color: var(--tn-accent) !important;
+  box-shadow: 0 0 0 1px var(--tn-accent), 0 0 14px -2px var(--tn-accent) !important;
+}
+
+/* Keep the expanded bar joined to its results panel. */
+#urlbar[popover-open] > .urlbar-background,
+#urlbar[open] > .urlbar-background {
+  border-end-start-radius: 0 !important;
+  border-end-end-radius: 0 !important;
+}
+
+#urlbar-input,
+.urlbar-input,
+#searchbar .searchbar-textbox {
+  color: var(--tn-fg) !important;
+}
+
+#urlbar-input::placeholder,
+.urlbar-input::placeholder,
+#searchbar .searchbar-textbox::placeholder {
+  color: var(--tn-comment) !important;
+  opacity: 1 !important;
+}
+
+/* Identity / shield / page-action chips */
+#urlbar .identity-box-button:is(:hover, [open]),
+#urlbar .urlbar-page-action:not([disabled]):is(:hover, [open]),
+#tracking-protection-icon-container:is(:hover, [open]),
+#page-action-buttons > .urlbar-icon:is(:hover, [open]) {
+  background-color: var(--tn-bg-highlight) !important;
+  border-radius: 6px !important;
+  color: var(--tn-fg) !important;
+  fill: var(--tn-fg) !important;
+}
+
+/* Bookmark star: Tokyo Night yellow when saved. */
+#star-button[starred] {
+  --toolbarbutton-icon-fill-attention: var(--tn-yellow) !important;
+}
+
+/* Dropdown surface (Nova paints it separately from the input). */
+#urlbar .urlbarView,
+#urlbar .urlbarView-background,
+#urlbar-results {
+  background-color: var(--tn-bg-dark) !important;
+  color: var(--tn-fg) !important;
+}
+
+#urlbar .urlbarView-body-inner {
+  border-top: 1px solid var(--tn-border) !important;
+}
+
+.urlbarView-row {
+  border-radius: 6px !important;
+  color: var(--tn-fg) !important;
+}
+
+.urlbarView-row:hover:not([selected]),
+.urlbarView-row:hover:not([selected]) > .urlbarView-row-inner {
+  background-color: var(--tn-bg-highlight) !important;
+}
+
+.urlbarView-row[selected],
+.urlbarView-row[selected] > .urlbarView-row-inner {
+  background-color: var(--tn-accent-soft) !important;
+  color: var(--tn-fg) !important;
+}
+
+.urlbarView-title {
+  color: var(--tn-fg) !important;
+}
+
+.urlbarView-url {
+  color: var(--tn-cyan) !important;
+}
+
+.urlbarView-action,
+.urlbarView-title-separator {
+  color: var(--tn-magenta) !important;
+}
+
+.urlbarView-row[selected] :is(.urlbarView-title, .urlbarView-url, .urlbarView-action, .urlbarView-title-separator) {
+  color: var(--tn-fg) !important;
+}
+
+/* ----------------------------------------------------------------------------
+   6. Toolbar buttons and icons
+   ---------------------------------------------------------------------------- */
+toolbar .toolbarbutton-1 > .toolbarbutton-icon,
+toolbar .toolbarbutton-1 > .toolbarbutton-badge-stack {
+  fill: var(--tn-fg) !important;
+  color: var(--tn-fg) !important;
+}
+
+toolbar .toolbarbutton-1:not([disabled]):is(:hover, [open], [checked]),
+toolbarbutton.bookmark-item:not(.subviewbutton, [disabled]):is(:hover, [open]) {
+  color: var(--tn-fg) !important;
+  fill: var(--tn-fg) !important;
+}
+
+/* ----------------------------------------------------------------------------
+   7. Menus, panels and popups
+   ---------------------------------------------------------------------------- */
+menupopup,
+panel {
+  --panel-background: var(--tn-bg-dark) !important;
+  --panel-color: var(--tn-fg) !important;
+  --panel-border-color: var(--tn-border) !important;
+  --menu-background-color: var(--tn-bg-dark) !important;
+  --menu-color: var(--tn-fg) !important;
+  --menuitem-hover-background-color: var(--tn-bg-highlight) !important;
+  color: var(--tn-fg) !important;
+}
+
+menupopup {
+  background-color: var(--tn-bg-dark) !important;
+}
+
+menupopup > menu,
+menupopup > menuitem,
+menupopup > menucaption {
+  color: var(--tn-fg) !important;
+}
+
+menupopup > :is(menu, menuitem, menucaption)[_moz-menuactive="true"] {
+  background-color: var(--tn-bg-highlight) !important;
+  color: var(--tn-fg) !important;
+}
+
+menupopup > menuitem[disabled="true"],
+menupopup > menu[disabled="true"] {
+  color: var(--tn-comment) !important;
+}
+
+menupopup > menuseparator {
+  border-top: 1px solid var(--tn-border) !important;
+  border-bottom: none !important;
+  margin-block: 4px !important;
+}
+
+panelview .subviewbutton:not([disabled]):is(:hover, [open], [checked], [selected]),
+.panel-subview-body .subviewbutton:not([disabled]):is(:hover, [open]) {
+  background-color: var(--tn-bg-highlight) !important;
+  color: var(--tn-fg) !important;
+}
+
+toolbarseparator,
+.panel-separator,
+#appMenu-popup toolbarseparator {
+  background-color: var(--tn-border) !important;
+}
+
+#appMenu-popup,
+#downloadsPanel,
+#protections-popup,
+#identity-popup,
+#unified-extensions-panel,
+#customizationui-widget-panel {
+  --panel-background: var(--tn-bg-dark) !important;
+  --panel-color: var(--tn-fg) !important;
+  --panel-border-color: var(--tn-border) !important;
+}
+
+/* ----------------------------------------------------------------------------
+   8. Sidebar (Nova sidebar + classic sidebar)
+   ---------------------------------------------------------------------------- */
+#sidebar-main,
+#sidebar-container,
+#sidebar-box,
+#sidebar,
+#sidebar-header,
+.sidebar-panel {
+  background-color: var(--tn-bg-dark) !important;
+  color: var(--tn-fg) !important;
+}
+
+#sidebar-header {
+  border-bottom: 1px solid var(--tn-border) !important;
+}
+
+#sidebar-splitter {
+  background-color: var(--tn-border) !important;
+  border: none !important;
+}
+
+#sidebar-main {
+  border-inline-end: 1px solid var(--tn-border) !important;
+}
+
+/* ----------------------------------------------------------------------------
+   9. Find bar, notifications, status panel
+   ---------------------------------------------------------------------------- */
+findbar {
+  background-color: var(--tn-bg-dark) !important;
+  color: var(--tn-fg) !important;
+  border-top: 1px solid var(--tn-border) !important;
+}
+
+findbar .findbar-textbox {
+  background-color: var(--tn-bg-darker) !important;
+  color: var(--tn-fg) !important;
+  border: 1px solid var(--tn-border) !important;
+  border-radius: 6px !important;
+  box-shadow: none !important;
+}
+
+findbar .findbar-textbox:focus {
+  border-color: var(--tn-accent) !important;
+}
+
+findbar .findbar-textbox::placeholder {
+  color: var(--tn-comment) !important;
+}
+
+findbar toolbarbutton {
+  color: var(--tn-fg-dark) !important;
+  fill: var(--tn-fg-dark) !important;
+}
+
+notification-message {
+  background-color: var(--tn-bg-dark) !important;
+  color: var(--tn-fg) !important;
+}
+
+notification-message .messageText {
+  color: var(--tn-fg) !important;
+}
+
+#statuspanel-label {
+  background-color: var(--tn-bg-dark) !important;
+  color: var(--tn-fg-dark) !important;
+  border: 1px solid var(--tn-border) !important;
+  border-top: none !important;
+  border-radius: 0 0 6px 0 !important;
+}
+
+/* ----------------------------------------------------------------------------
+   10. Library window, customization mode, sidebar trees
+   ---------------------------------------------------------------------------- */
+#placesToolbar,
+#placesView,
+#placesList,
+#placeContent,
+#placesList tree,
+#placeContent tree {
+  background-color: var(--tn-bg) !important;
+  color: var(--tn-fg) !important;
+}
+
+#placesToolbar {
+  border-bottom: 1px solid var(--tn-border) !important;
+}
+
+#placesView {
+  border-color: var(--tn-border) !important;
+}
+
+#placesList treechildren::-moz-tree-row(hover),
+#placeContent treechildren::-moz-tree-row(hover),
+#sidebar treechildren::-moz-tree-row(hover) {
+  background-color: var(--tn-bg-highlight) !important;
+}
+
+#placesList treechildren::-moz-tree-row(selected),
+#placeContent treechildren::-moz-tree-row(selected),
+#sidebar treechildren::-moz-tree-row(selected) {
+  background-color: var(--tn-accent-soft) !important;
+  color: var(--tn-fg) !important;
+}
+
+#customization-container,
+#customization-panelHolder,
+#customization-paint-box {
+  background-color: var(--tn-bg-dark) !important;
+  color: var(--tn-fg) !important;
+}
+
+/* ----------------------------------------------------------------------------
+   11. Bookmarks toolbar, tooltips, window controls
+   ---------------------------------------------------------------------------- */
+#PersonalToolbar {
+  border-bottom: 1px solid var(--tn-border) !important;
+}
+
+#PersonalToolbar .bookmark-item {
+  color: var(--tn-fg-dark) !important;
+  border-radius: 4px !important;
+}
+
+#PersonalToolbar .bookmark-item:hover {
+  background-color: var(--tn-bg-highlight) !important;
+  color: var(--tn-fg) !important;
+}
+
+tooltip {
+  appearance: none !important;
+  -moz-appearance: none !important;
+  background-color: var(--tn-bg-dark) !important;
+  color: var(--tn-fg) !important;
+  border: 1px solid var(--tn-border) !important;
+}
+
+.titlebar-button {
+  background-color: transparent !important;
+  color: var(--tn-fg-dark) !important;
+  fill: var(--tn-fg-dark) !important;
+}
+
+.titlebar-button:hover {
+  background-color: var(--tn-bg-highlight) !important;
+  color: var(--tn-fg) !important;
+  fill: var(--tn-fg) !important;
+}
+
+.titlebar-close:hover,
+#titlebar-close:hover {
+  background-color: var(--tn-red1) !important;
+  color: #ffffff !important;
+  fill: #ffffff !important;
+}
+
+/* ----------------------------------------------------------------------------
+   12. Scrollbars, selection, private windows
+   ---------------------------------------------------------------------------- */
+:root {
+  scrollbar-color: var(--tn-border) var(--tn-bg-dark);
+  scrollbar-width: thin;
+}
+
+::selection {
+  background-color: var(--tn-accent-soft) !important;
+  color: var(--tn-fg) !important;
+}
+
+/* Private windows lean on Tokyo Night's magenta. */
+:root[privatebrowsingmode="temporary"] {
+  --tn-accent: var(--tn-magenta);
+  --tn-accent-soft: #4a3a6b;
+}
+
+#private-browsing-indicator,
+#private-browsing-indicator-with-label {
+  color: var(--tn-magenta) !important;
+  fill: var(--tn-magenta) !important;
+}
+
+/* ----------------------------------------------------------------------------
+   13. Optional tweaks — uncomment to taste
+   ---------------------------------------------------------------------------- */
+
+/* Square-ish corners:
+:root { --tn-radius: 4px; --tn-tab-radius: 4px; }
+*/
+
+/* Accent variations:
+:root { --tn-accent: var(--tn-magenta); --tn-accent-soft: #4a3a6b; }   purple
+:root { --tn-accent: var(--tn-cyan);    --tn-accent-soft: #2c5a72; }   cyan
+:root { --tn-accent: var(--tn-green);   --tn-accent-soft: #3d5a35; }   green
+*/
+
+/* Larger text in the address bar:
+#urlbar-input { font-size: 1.05em !important; }
+*/

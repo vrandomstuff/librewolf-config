@@ -1,0 +1,15 @@
+/* ============================================================================
+   Tokyo Night Storm — entry point
+   ----------------------------------------------------------------------------
+   Copy the whole `chrome` folder into your Firefox/LibreWolf profile, or, if
+   you already have a userChrome.css, copy `tokyo-night-storm.css` next to it
+   and add the import below to the TOP of your existing file.
+
+   Requires (about:config):
+     toolkit.legacyUserProfileCustomizations.stylesheets = true
+
+   Works best with the Nova UI (Firefox/LibreWolf 157+), but degrades
+   gracefully if Nova is disabled.
+   ============================================================================ */
+
+@import url("tokyo-night-storm.css");

@@ -1,0 +1,63 @@
+{
+  "manifest_version": 2,
+  "name": "Tokyo Night Storm",
+  "version": "1.0.0",
+  "description": "The Tokyo Night Storm palette applied to LibreWolf and Firefox: deep storm-blue chrome, soft lavender text and neon blue accents.",
+  "author": "Tokyo Night Storm theme contributors",
+  "icons": {
+    "48": "icon.svg",
+    "96": "icon.svg"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "tokyo-night-storm@local",
+      "strict_min_version": "128.0"
+    }
+  },
+  "theme": {
+    "colors": {
+      "frame": "#1f2335",
+      "frame_inactive": "#1b1e2d",
+      "toolbar": "#24283b",
+      "toolbar_text": "#c0caf5",
+      "bookmark_text": "#a9b1d6",
+      "tab_background_text": "#a9b1d6",
+      "tab_text": "#c0caf5",
+      "tab_selected": "#292e42",
+      "tab_line": "#7aa2f7",
+      "tab_loading": "#7aa2f7",
+      "icons": "#c0caf5",
+      "icons_attention": "#7aa2f7",
+      "button_background_hover": "#292e42",
+      "button_background_active": "#3d59a1",
+      "toolbar_field": "#1b1e2d",
+      "toolbar_field_text": "#c0caf5",
+      "toolbar_field_text_focus": "#c0caf5",
+      "toolbar_field_border": "#3b4261",
+      "toolbar_field_border_focus": "#7aa2f7",
+      "toolbar_field_focus": "#1b1e2d",
+      "toolbar_field_highlight": "#3d59a1",
+      "toolbar_field_highlight_text": "#c0caf5",
+      "toolbar_top_separator": "transparent",
+      "toolbar_bottom_separator": "#3b4261",
+      "toolbar_vertical_separator": "#3b4261",
+      "popup": "#1f2335",
+      "popup_text": "#c0caf5",
+      "popup_border": "#3b4261",
+      "popup_highlight": "#3d59a1",
+      "popup_highlight_text": "#c0caf5",
+      "sidebar": "#1f2335",
+      "sidebar_text": "#c0caf5",
+      "sidebar_border": "#3b4261",
+      "sidebar_highlight": "#3d59a1",
+      "sidebar_highlight_text": "#c0caf5",
+      "ntp_background": "#24283b",
+      "ntp_card_background": "#1f2335",
+      "ntp_text": "#c0caf5"
+    },
+    "properties": {
+      "color_scheme": "dark",
+      "content_color_scheme": "dark"
+    }
+  }
+}

@@ -1,0 +1,241 @@
+/* ============================================================================
+   Tokyo Night Storm — content pages (userContent.css)
+   ----------------------------------------------------------------------------
+   Styles Firefox/LibreWolf's internal pages: blank/new tab, Settings, Add-ons,
+   about:config, Downloads, private browsing. Regular websites are left alone.
+
+   Install: add this line to the TOP of your profile's chrome/userContent.css
+            (or copy the bundled userContent.css):
+
+              @import url("tokyo-night-storm-content.css");
+
+   Optional: scroll down to section 5 for a snippet that also darkens
+   scrollbars on ordinary websites (disabled by default).
+   ============================================================================ */
+
+/* ----------------------------------------------------------------------------
+   1. Palette (kept in sync with tokyo-night-storm.css)
+   ---------------------------------------------------------------------------- */
+@-moz-document url-prefix("about:") {
+  :root {
+    --tn-bg:           #24283b;
+    --tn-bg-dark:      #1f2335;
+    --tn-bg-darker:    #1b1e2d;
+    --tn-bg-highlight: #292e42;
+    --tn-border:       #3b4261;
+    --tn-fg:           #c0caf5;
+    --tn-fg-dark:      #a9b1d6;
+    --tn-comment:      #565f89;
+    --tn-blue:         #7aa2f7;
+    --tn-blue0:        #3d59a1;
+    --tn-cyan:         #7dcfff;
+    --tn-magenta:      #bb9af7;
+    --tn-yellow:       #e0af68;
+    --tn-green:        #9ece6a;
+    --tn-teal:         #73daca;
+    --tn-red:          #f7768e;
+
+    color-scheme: dark !important;
+    scrollbar-color: var(--tn-border) var(--tn-bg-dark);
+    scrollbar-width: thin;
+  }
+
+  ::selection {
+    background-color: var(--tn-blue0) !important;
+    color: var(--tn-fg) !important;
+  }
+}
+
+/* ----------------------------------------------------------------------------
+   2. Blank page, home, new tab, private browsing
+   ---------------------------------------------------------------------------- */
+@-moz-document url("about:blank"),
+               url("about:home"),
+               url("about:newtab"),
+               url("about:privatebrowsing"),
+               url("about:sessionrestore"),
+               url("about:welcomeback") {
+  html,
+  body {
+    background-color: #24283b !important;
+    color: #c0caf5 !important;
+  }
+}
+
+@-moz-document url("about:newtab"),
+               url("about:home"),
+               url("about:firefoxview") {
+  :root {
+    --newtab-background-color:            #24283b !important;
+    --newtab-background-color-secondary:  #1f2335 !important;
+    --newtab-text-primary-color:          #c0caf5 !important;
+    --newtab-text-secondary-color:        #a9b1d6 !important;
+    --newtab-text-tertiary-color:         #565f89 !important;
+    --newtab-primary-action-background:   #7aa2f7 !important;
+    --newtab-primary-element-hover-color: #7dcfff !important;
+    --newtab-element-hover-color:         #292e42 !important;
+    --newtab-element-active-color:        #3d59a1 !important;
+    --newtab-border-color:                #3b4261 !important;
+    --newtab-card-background-color:       #1f2335 !important;
+    --newtab-card-border-color:           #3b4261 !important;
+    --newtab-card-hover-background-color: #292e42 !important;
+    --newtab-search-box-background:       #1b1e2d !important;
+    --newtab-search-box-border:           #3b4261 !important;
+    --newtab-search-box-text:             #c0caf5 !important;
+    --newtab-search-icon-color:           #7aa2f7 !important;
+    --newtab-weather-background-color:    #1f2335 !important;
+    --newtab-button-background-color:     #292e42 !important;
+    --newtab-button-hover-background-color: #3b4261 !important;
+  }
+
+  /* Firefox's new-tab CSS still hard-codes a few light surfaces. */
+  .outer-wrapper,
+  .top-sites-list,
+  .search-wrapper .search-handoff-button {
+    background-color: #24283b !important;
+    color: #c0caf5 !important;
+  }
+
+  .search-wrapper .search-handoff-button,
+  .search-wrapper .search-handoff-button:focus {
+    background-color: #1b1e2d !important;
+    border-color: #3b4261 !important;
+    color: #c0caf5 !important;
+  }
+
+  .search-wrapper .search-handoff-button .fake-textbox {
+    color: #565f89 !important;
+  }
+}
+
+@-moz-document url("about:privatebrowsing") {
+  :root {
+    --in-content-page-background: #1f2335 !important;
+    --in-content-page-color: #c0caf5 !important;
+    --in-content-primary-button-background: #3d59a1 !important;
+    --in-content-primary-button-text-color: #c0caf5 !important;
+  }
+
+  .private-browsing-container,
+  .showPrivate {
+    background-color: #1f2335 !important;
+    color: #c0caf5 !important;
+  }
+}
+
+/* ----------------------------------------------------------------------------
+   3. Settings, Add-ons, config, downloads, profiles
+   ---------------------------------------------------------------------------- */
+@-moz-document url-prefix("about:preferences"),
+               url-prefix("about:addons"),
+               url-prefix("about:config"),
+               url-prefix("about:profiles"),
+               url-prefix("about:downloads"),
+               url-prefix("about:policies"),
+               url-prefix("about:support"),
+               url-prefix("about:protections") {
+  :root {
+    --in-content-page-background:       #24283b !important;
+    --in-content-page-color:            #c0caf5 !important;
+    --in-content-text-color:            #c0caf5 !important;
+    --in-content-deemphasized-text:     #a9b1d6 !important;
+    --in-content-box-background:        #1f2335 !important;
+    --in-content-box-background-odd:    #1b1e2d !important;
+    --in-content-box-background-hover:  #292e42 !important;
+    --in-content-box-background-active: #3d59a1 !important;
+    --in-content-box-border-color:      #3b4261 !important;
+    --in-content-border-color:          #3b4261 !important;
+    --in-content-border-hover:          #565f89 !important;
+    --in-content-button-background:       #292e42 !important;
+    --in-content-button-background-hover: #3b4261 !important;
+    --in-content-button-background-active: #3d59a1 !important;
+    --in-content-button-text-color:       #c0caf5 !important;
+    --in-content-primary-button-background:       #3d59a1 !important;
+    --in-content-primary-button-background-hover: #4c6cb8 !important;
+    --in-content-primary-button-background-active: #7aa2f7 !important;
+    --in-content-primary-button-text-color:       #c0caf5 !important;
+    --in-content-link-color:         #7aa2f7 !important;
+    --in-content-link-color-hover:   #7dcfff !important;
+    --in-content-link-color-active:  #bb9af7 !important;
+    --in-content-link-color-visited: #9d7cd8 !important;
+    --in-content-focus-outline-color: #7aa2f7 !important;
+    --in-content-accent-color:        #7aa2f7 !important;
+    --in-content-accent-color-hover:  #7dcfff !important;
+    --in-content-item-hover:          #292e42 !important;
+    --in-content-item-selected:       #3d59a1 !important;
+    --in-content-selected-text:       #c0caf5 !important;
+    --in-content-table-background:    #1f2335 !important;
+    --in-content-table-border-color:  #3b4261 !important;
+    --in-content-danger-button-background: #db4b4b !important;
+    --in-content-danger-button-background-hover: #f7768e !important;
+    --in-content-warning-container:   #3a3226 !important;
+    --background-color-canvas:        #24283b !important;
+    --background-color-box:           #1f2335 !important;
+    --text-color:                     #c0caf5 !important;
+    --text-color-deemphasized:        #a9b1d6 !important;
+    --border-color:                   #3b4261 !important;
+    --link-color:                     #7aa2f7 !important;
+    --button-background-color:        #292e42 !important;
+    --button-background-color-hover:  #3b4261 !important;
+    --button-text-color:              #c0caf5 !important;
+    --card-outline-color:             #3b4261 !important;
+    --card-shadow:                    none !important;
+    --dialog-warning-text-color:      #e0af68 !important;
+  }
+
+  body {
+    background-color: #24283b !important;
+    color: #c0caf5 !important;
+  }
+
+  a {
+    color: #7aa2f7 !important;
+  }
+
+  a:hover {
+    color: #7dcfff !important;
+  }
+
+  input,
+  textarea,
+  select,
+  search-textbox,
+  menulist {
+    background-color: #1b1e2d !important;
+    color: #c0caf5 !important;
+    border-color: #3b4261 !important;
+  }
+}
+
+/* ----------------------------------------------------------------------------
+   4. Scrollbars on internal pages
+   ---------------------------------------------------------------------------- */
+@-moz-document url-prefix("about:") {
+  * {
+    scrollbar-color: #3b4261 #1f2335;
+    scrollbar-width: thin;
+  }
+}
+
+/* ----------------------------------------------------------------------------
+   5. Optional: dark scrollbars on ordinary websites
+   ----------------------------------------------------------------------------
+   Uncomment if you want every page's scrollbars to match. It only recolours
+   the scrollbars; it does not change page backgrounds or text.
+
+@-moz-document url-prefix("http"), url-prefix("https") {
+  * {
+    scrollbar-color: #3b4261 #1b1e2d !important;
+    scrollbar-width: thin;
+  }
+}
+
+   And optionally a Tokyo Night text selection on every website:
+
+@-moz-document url-prefix("http"), url-prefix("https") {
+  ::selection {
+    background-color: #3d59a1 !important;
+    color: #c0caf5 !important;
+  }
+}
+   ---------------------------------------------------------------------------- */
