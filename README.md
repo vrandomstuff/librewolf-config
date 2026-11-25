@@ -54,35 +54,40 @@ switched off.
 
 3. Know where your profile is. Easiest: open `about:profiles`, find the profile
    marked **Default**, and click **Open Folder** under **Root Directory**.
-   On Windows it is usually:
+   Common locations:
 
    ```
-   %APPDATA%\librewolf\Profiles\<random>.default-release
+   Windows: %APPDATA%\librewolf\Profiles\<random>.default-release
+   macOS:   ~/Library/Application Support/librewolf/Profiles/<random>.default-release
+   Linux:   ~/.librewolf
    ```
 
 ### Option A — installer script (recommended)
 
-The script copies the theme files into your profile's `chrome` folder and adds
-the `@import` lines to the top of your existing `userChrome.css` and
-`userContent.css`. It backs up any file it modifies.
+`install.py` copies the theme files into your profile's `chrome` folder and
+adds the `@import` lines to the top of your existing `userChrome.css` and
+`userContent.css`. It backs up any file it modifies. It also installs
+`sideberry.css` through Sidebery's managed storage (see below).
 
-```powershell
-# from this folder
-.\install.ps1 -DryRun     # preview
-.\install.ps1             # install
+```sh
+python3 install.py --dry-run    # preview
+python3 install.py              # install
 ```
 
-If PowerShell refuses to run the script, use:
+On Windows use `python` instead of `python3`. The profile is auto-detected from
+`installs.ini` / `profiles.ini`; pass one explicitly if needed:
 
-```powershell
-powershell -ExecutionPolicy Bypass -File .\install.ps1 -DryRun
-powershell -ExecutionPolicy Bypass -File .\install.ps1
+```sh
+python3 install.py --profile-path "/path/to/profile"
 ```
 
-If you have more than one profile, pass one explicitly:
+Useful flags:
 
-```powershell
-.\install.ps1 -ProfilePath "$env:APPDATA\librewolf\Profiles\8tlxbvgs.default-release"
+```sh
+python3 install.py --skip-sidebery          # chrome CSS only
+python3 install.py --skip-chrome            # Sidebery CSS only
+python3 install.py --remove-sidebery        # undo the Sidebery CSS
+python3 install.py --managed-storage-path <dir>  # override manifest location
 ```
 
 Then restart LibreWolf.
@@ -144,6 +149,24 @@ LibreWolf** → **Load Temporary Add-on**.
 
 Using the add-on and the CSS together is fine; the CSS wins where they overlap.
 
+### Sidebery (managed CSS)
+
+`sideberry.css` is applied through Sidebery's `storage.managed` support, which
+Sidebery checks before its own saved CSS. That means the theme is installed as
+a plain JSON file, not by editing Sidebery's IndexedDB:
+
+```
+Windows: %APPDATA%\Mozilla\ManagedStorage\{3c078156-979c-498b-8990-85f7987dd929}.json
+macOS:   ~/Library/Application Support/Mozilla/ManagedStorage/{3c078156-979c-498b-8990-85f7987dd929}.json
+Linux:   ~/.mozilla/managed-storage/{3c078156-979c-498b-8990-85f7987dd929}.json
+```
+
+On Windows the installer also creates the matching
+`HKCU\Software\Mozilla\ManagedStorage\{3c078156-...}` registry key. Managed CSS
+is read-only inside Sidebery and overrides anything typed in its settings.
+Run `python3 install.py --remove-sidebery` to restore Sidebery's own CSS, then
+restart LibreWolf. The manifest is per-user, not per-profile.
+
 ## Customising
 
 The whole theme derives from the variables at the top of
@@ -180,8 +203,9 @@ to your own CSS after the import) instead of editing rules throughout.
 - **LibreWolf's own theme:** LibreWolf ships with a dark theme. The theme is
   independent of it; you can keep **Dark** selected in Appearance.
 - **Sidebery / other sidebar extensions:** they draw their own content. The
-  browser sidebar frame is themed, but for the panel itself use the extension's
-  own theme settings with the palette above.
+  browser sidebar frame is themed; Sidebery's panel is themed separately through
+  `sideberry.css` and managed storage (see above). Other sidebar extensions need
+  their own settings with the palette above.
 - **Private windows** switch the accent from blue to magenta automatically.
 - **`userContent.css`** affects internal `about:` pages only. Website scrollbar
   and selection snippets are included but commented out at the bottom of
@@ -200,7 +224,8 @@ chrome/
 theme/
   manifest.json                   optional static theme add-on
   icon.svg
-install.ps1                       safe installer for LibreWolf profiles
+sideberry.css                     Sidebery custom CSS (managed storage)
+install.py                        safe installer for LibreWolf profiles
 build.ps1                         builds dist/tokyo-night-storm.xpi
 preview.html                      hand-built UI mockup
 preview.png                       screenshot of the mockup

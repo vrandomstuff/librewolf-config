@@ -20,22 +20,30 @@ sync — it is not a separate design, just the same theme applied via
   `tokyo-night-storm-content.css` (`about:` pages / new tab). This path can
   style surfaces the static theme API cannot, but its colours must stay in sync
   with `theme/manifest.json`.
-- `install.ps1` — copies `chrome/*.css` into a LibreWolf profile and prepends
-  the imports, backing up any file it touches. Supports `-DryRun` and
-  `-ProfilePath`.
+- `install.py` — copies `chrome/*.css` into a LibreWolf profile and prepends the
+  imports, backing up any file it touches. Also writes `sideberry.css` into
+  Sidebery's managed storage so its IndexedDB is never edited. Supports
+  `--dry-run`, `--profile-path`, `--managed-storage-path`, `--skip-chrome`,
+  `--skip-sidebery`, and `--remove-sidebery`.
 - No package manager, tests, linter, CI, or git repo here. Do not look for npm
-  scripts or lockfiles.
+  scripts or lockfiles. Python 3 standard library only; do not add dependencies.
 
 ## Docs
 
 `README.md` and the footer of `preview.html` document the CSS route (Options
-A/B/C) and the optional XPI. Keep them in sync when the palette or install
-steps change.
+A/B/C), the Sidebery managed-storage route, and the optional XPI. Keep them in
+sync when the palette or install steps change.
 
 Note: README targets Firefox/LibreWolf 160 + Nova, but
 `theme/manifest.json` has `strict_min_version: "128.0"`.
 
 ## Commands
+
+```sh
+python3 install.py --dry-run         # preview chrome + Sidebery install
+python3 install.py                   # install both
+python3 install.py --remove-sidebery  # restore Sidebery's own CSS
+```
 
 ```powershell
 .\build.ps1                          # -> dist\tokyo-night-storm.xpi (overwrites)
@@ -55,9 +63,10 @@ There is no test or lint step. Verify a change by:
 
 - `theme/manifest.json` → `theme.colors` is the source of truth for the add-on.
   Keep `properties.color_scheme` and `content_color_scheme` set to `dark`.
-- **Keep `chrome/` in sync with the XPI.** The same hex values are duplicated in
-  `chrome/tokyo-night-storm.css` (as `--tn-*`),
-  `chrome/tokyo-night-storm-content.css` (hard-coded), `preview.html`'s `:root`
-  (as `--bg`, `--blue`, `--magenta`, …) and the README table. A palette change
-  must touch all of them; `preview.html` is hand-written, not generated.
+- **Keep `chrome/` and `sideberry.css` in sync with the XPI.** The same hex
+  values are duplicated in `chrome/tokyo-night-storm.css` (as `--tn-*`),
+  `chrome/tokyo-night-storm-content.css` (hard-coded), `sideberry.css` (as
+  `--tn-*`), `preview.html`'s `:root` (as `--bg`, `--blue`, `--magenta`, …) and
+  the README table. A palette change must touch all of them; `preview.html` is
+  hand-written, not generated.
 - Bump `version` in `theme/manifest.json` for any release, then rebuild the XPI.
