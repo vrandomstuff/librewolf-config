@@ -1,72 +1,75 @@
 # AGENTS.md
 
-LibreWolf/Firefox **static theme add-on** (WebExtension `theme`, MV2) using the
-Tokyo Night Storm palette.
+Tokyo Night Storm CSS theme targeted at LibreWolf; regular Firefox is untested
+and may not work. Targets Nova UI 157+; the chrome CSS includes legacy token
+fallbacks.
 
-## What is actually in this repo
+## Repo shape
 
-**The XPI is the focus.** `theme/` is the primary deliverable and the shipped
-artifact: make theme changes there first, then mirror the palette into the CSS
-files. The `chrome/` route is a supported secondary path that must be kept in
-sync — it is not a separate design, just the same theme applied via
-`userChrome.css`.
+- `chrome/` is the shipped product. `userChrome.css` and `userContent.css` are
+  entry points that import `tokyo-night-storm.css` and
+  `tokyo-night-storm-content.css`; `userChrome.css` also hides the tab strip and
+  sidebar header and moves window controls, so it is not just an import shim.
+- `sideberry.css` is applied through Sidebery's managed `storage` manifest
+  (per-user, not per-profile), not by editing Sidebery IndexedDB or settings.
+- `install.py` is the only executable installer and the source of truth for
+  install behavior.
+- The static add-on/XPI route is gone from the current tree. Do not reintroduce
+  `theme/`, `build.ps1`, `dist/`, or `preview.html` references into docs or
+  commands.
 
-- `theme/` — installable static theme add-on: `manifest.json` + `icon.svg`.
-  `build.ps1` zips the *contents* of `theme/` into `dist/tokyo-night-storm.xpi`
-  (ZIP with `manifest.json` at the root). Anything placed in `theme/` ships in
-  the add-on, so do not drop stray files there.
-- `chrome/` — `userChrome.css` / `userContent.css` entry points that `@import`
-  `tokyo-night-storm.css` (browser chrome) and
-  `tokyo-night-storm-content.css` (`about:` pages / new tab). This path can
-  style surfaces the static theme API cannot, but its colours must stay in sync
-  with `theme/manifest.json`.
-- `install.py` — copies `chrome/*.css` into a LibreWolf profile and prepends the
-  imports, backing up any file it touches. Also writes `sideberry.css` into
-  Sidebery's managed storage so its IndexedDB is never edited. Supports
-  `--dry-run`, `--profile-path`, `--managed-storage-path`, `--skip-chrome`,
-  `--skip-sidebery`, and `--remove-sidebery`.
-- No package manager, tests, linter, CI, or git repo here. Do not look for npm
-  scripts or lockfiles. Python 3 standard library only; do not add dependencies.
+## Installer behavior and constraints
 
-## Docs
-
-`README.md` and the footer of `preview.html` document the CSS route (Options
-A/B/C), the Sidebery managed-storage route, and the optional XPI. Keep them in
-sync when the palette or install steps change.
-
-Note: README targets Firefox/LibreWolf 160 + Nova, but
-`theme/manifest.json` has `strict_min_version: "128.0"`.
+- `python3 install.py` copies all four `chrome/*.css` files into
+  `<profile>/chrome/`, including both entry points. It overwrites existing
+  `userChrome.css`/`userContent.css` after timestamped `.bak-*` backups; it does
+  not prepend imports to an existing file. The manual README path is different:
+  keep your own entry files and add `@import` as the first line (only `@charset`
+  may precede it).
+- The installer writes `sideberry.css` into a `Mozilla/ManagedStorage`
+  `{sideberyId}.json` manifest, appends missing prefs to `<profile>/user.js`,
+  and downloads the latest Sidebery and Dark Reader XPIs from AMO into
+  `<profile>/extensions/` (they are not vendored). `--dry-run` skips all writes
+  and downloads.
+- On Windows, managed storage is registered in HKCU
+  (`Software\Mozilla\ManagedStorage\...`) and the same XPIs are also added to
+  the HKCU extension-install policy. Elsewhere the manifest lives in
+  `~/Library/Application Support/Mozilla/ManagedStorage` (macOS) or
+  `~/.mozilla/managed-storage` (Linux).
+- Write scope is strictly the selected profile, HKCU, and
+  `Mozilla/ManagedStorage`. Never touch the LibreWolf install directory, its
+  shipped `policies.json`, or the system policy folder.
+- `xpinstall.signatures.required = false` only works in LibreWolf; regular
+  Firefox releases ignore it, so do not rely on it for Firefox.
+- Profile auto-detection reads `Default` from `installs.ini`/`profiles.ini`, then
+  falls back to the newest directory under `Profiles`; the chosen folder must
+  contain `prefs.js`. Pass `--profile-path` when detection is wrong. Sidebery-
+  only runs (`--skip-chrome --skip-extensions --skip-prefs`) need no profile.
+- `--remove-sidebery` deletes the managed manifest and Windows registry key; it
+  does not restore a backed-up manifest. Existing `user*.css`, `user.js`, and
+  Sidebery manifests are backed up as `.bak-*`, which `.gitignore` ignores.
 
 ## Commands
 
 ```sh
-python3 install.py --dry-run         # preview chrome + Sidebery install
-python3 install.py                   # install both
-python3 install.py --remove-sidebery  # restore Sidebery's own CSS
+python3 install.py --dry-run    # safe preview; use `python` on Windows
+python3 install.py              # mutates the real profile
+python3 install.py --remove-sidebery
+python3 install.py --help
 ```
 
-```powershell
-.\build.ps1                          # -> dist\tokyo-night-storm.xpi (overwrites)
-.\build.ps1 -OutputDirectory <dir>   # custom output
-```
+Other flags: `--profile-path`, `--managed-storage-path`, `--skip-chrome`,
+`--skip-sidebery`, `--skip-extensions`, `--skip-prefs`.
 
-There is no test or lint step. Verify a change by:
+## Style, palette, verification
 
-- loading `theme/manifest.json` via `about:debugging` → **Load Temporary Add-on**
-  (fastest iteration, no build), or
-- rebuilding and installing `dist\tokyo-night-storm.xpi` with
-  `xpinstall.signatures.required = false` in LibreWolf (`about:config`).
-
-`dist/` is build output and gitignored; never edit it by hand.
-
-## Palette / version edits
-
-- `theme/manifest.json` → `theme.colors` is the source of truth for the add-on.
-  Keep `properties.color_scheme` and `content_color_scheme` set to `dark`.
-- **Keep `chrome/` and `sideberry.css` in sync with the XPI.** The same hex
-  values are duplicated in `chrome/tokyo-night-storm.css` (as `--tn-*`),
-  `chrome/tokyo-night-storm-content.css` (hard-coded), `sideberry.css` (as
-  `--tn-*`), `preview.html`'s `:root` (as `--bg`, `--blue`, `--magenta`, …) and
-  the README table. A palette change must touch all of them; `preview.html` is
-  hand-written, not generated.
-- Bump `version` in `theme/manifest.json` for any release, then rebuild the XPI.
+- Python 3 standard library only; use tabs and camelCase in `install.py`.
+  Keep CLI flags kebab-case; do not rename `user_pref()` names, CSS selectors,
+  Firefox design tokens, or Sidebery DOM classes — they are external APIs.
+- The palette is duplicated in `chrome/tokyo-night-storm.css` (`--tn-*`),
+  `chrome/tokyo-night-storm-content.css` (hard-coded hex), and `sideberry.css`
+  (`--tn-*` subset). There is no generator or preview file; update all three for
+  a palette change.
+- No package manager, tests, linter, or CI. Verify with `--dry-run` and
+  `--help`; functional checks require restarting LibreWolf and inspecting
+  chrome, `about:` pages, and Sidebery.

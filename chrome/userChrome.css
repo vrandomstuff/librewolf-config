@@ -16,6 +16,10 @@
 
 /* Hide toolbar and move window controls to the right of the navigation bar (Nova UI) */
 
+#TabsToolbar {
+	display: none !important;
+}
+
 #TabsToolbar-customization-target {
   display: none !important;
 }
@@ -35,4 +39,8 @@
 
 #sidebar-panel-header {
   display: none !important;
+}
+/* Bookmarks bar */
+#PersonalToolbar {
+	display: none;
 }
